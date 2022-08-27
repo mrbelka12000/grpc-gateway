@@ -11,10 +11,10 @@ type Handler struct {
 	ts service.TracksService
 }
 
-func New(us service.UserService, ts service.TracksService) *Handler {
+func New(srv *service.Service) *Handler {
 	return &Handler{
-		us: us,
-		ts: ts,
+		us: srv.UserService,
+		ts: srv.TracksService,
 	}
 }
 

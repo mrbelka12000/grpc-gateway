@@ -4,7 +4,7 @@ import "fmt"
 
 type User struct{}
 
-func newUser() *User {
+func NewUser() *User {
 	return &User{}
 }
 

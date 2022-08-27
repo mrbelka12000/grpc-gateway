@@ -2,7 +2,7 @@ package repo
 
 type Tracks struct{}
 
-func newTracks() *Tracks {
+func NewTracks() *Tracks {
 	return &Tracks{}
 }
 

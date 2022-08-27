@@ -1,13 +1,13 @@
 package service
 
 type Service struct {
-	*User
-	*Tracks
+	UserService
+	TracksService
 }
 
 func New(ur UserRepo, tr TracksRepo) *Service {
 	return &Service{
-		User:   newUser(ur),
-		Tracks: newTracks(tr),
+		UserService:   newUser(ur),
+		TracksService: newTracks(tr),
 	}
 }

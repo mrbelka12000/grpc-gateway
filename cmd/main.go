@@ -7,8 +7,9 @@ import (
 )
 
 func main() {
-	repo := repo.NewRepo()
-	srv := service.New(repo.User, repo.Tracks)
-	handler := handler.New(srv.User, srv.Tracks)
+	srv := service.New(
+		repo.NewUser(),
+		repo.NewTracks())
+	handler := handler.New(srv)
 	handler.Check()
 }
