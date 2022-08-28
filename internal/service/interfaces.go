@@ -4,14 +4,18 @@ import "github.com/mrbelka12000/grpc-gateway/internal/models"
 
 type (
 	UserService interface {
-		Login() (string, error)
-		SaveLoginData()
+		GetLoginUrl(ip string) (string, error)
+		SaveLoginCode(ip string, loginResp *models.LoginResp) error
+		GetLoginCode(ip string) string
 	}
 	UserRepo interface {
-		SaveLoginData()
+		SaveLoginCode(ip, code string)
+		GetLoginCode(ip string) string
+		SaveUsersState(ip, state string)
+		CheckStateByIP(ip, state string) bool
 	}
 	Session interface {
-		Get()
+		Get(code string)
 		Update()
 	}
 	TracksRepo interface {
