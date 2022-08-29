@@ -11,7 +11,7 @@ type Gateway struct {
 	notify chan error
 }
 
-func NewServer() *Gateway {
+func New() *Gateway {
 	mux := runtime.NewServeMux()
 
 	httpServer := &http.Server{

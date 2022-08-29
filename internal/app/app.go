@@ -23,11 +23,11 @@ func Initialize() {
 	gatewayImp := gateway.New(srvImp)
 	gatewayImp.Register(grpcServer)
 
-	server := http.NewServer()
+	gateway := http.New()
 	go grpcServer.Serve(lis)
 	fmt.Println("grpc server started")
 	fmt.Println("http server started")
-	err = <-server.Notify()
+	err = <-gateway.Notify()
 	if err != nil {
 		log.Println(err)
 	}
