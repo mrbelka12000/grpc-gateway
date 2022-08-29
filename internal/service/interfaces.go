@@ -1,3 +1,7 @@
 package service
 
-type ()
+type (
+	Fetch interface {
+		GetInfoByIIN(iin string)
+	}
+)
