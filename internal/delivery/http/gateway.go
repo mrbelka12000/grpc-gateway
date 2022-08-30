@@ -1,9 +1,13 @@
 package http
 
 import (
+	"context"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
+	"github.com/mrbelka12000/grpc-gateway/proto"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"net/http"
-
-	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	//"github.com/grpc-ecosystem/grpc-gateway/runtime"
 )
 
 type Gateway struct {
@@ -23,6 +27,8 @@ func New() *Gateway {
 		notify: make(chan error),
 	}
 
+	gateway.registerHandlers(mux)
+
 	go gateway.start()
 
 	return gateway
@@ -39,13 +45,15 @@ func (g *Gateway) Notify() <-chan error {
 	return g.notify
 }
 
-func (g *Gateway) RegisterHanlders() error {
-	// opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
-	// localhost:12201 is address of grpc server
-	// err := proto.RegisterGatewayHandlerFromEndpoint(ctx, mux, "localhost:12201", opts)
-	// if err != nil {
-	// 	return err
-	// }
-
+func (g *Gateway) registerHandlers(mux *runtime.ServeMux) error {
+	opts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
+	err := proto.RegisterGatewayHandlerFromEndpoint(context.Background(), mux, "localhost:50511", opts)
+	if err != nil {
+		return err
+	}
 	return nil
+}
+
+func (g *Gateway) Shutdown() error {
+	return g.server.Shutdown(context.Background())
 }

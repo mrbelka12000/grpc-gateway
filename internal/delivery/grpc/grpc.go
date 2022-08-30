@@ -7,18 +7,15 @@ import (
 )
 
 type GrpcServer struct {
-	im protoInterface
-}
-
-// temp inteface
-type protoInterface interface {
-	GetInfoByIIN(iin string)
+	im proto.GatewayServer
 }
 
 func New(f service.Fetch) *GrpcServer {
-	return &GrpcServer{im: newImpelementer(f)}
+	return &GrpcServer{
+		im: newImpelementer(f),
+	}
 }
 
 func (i *GrpcServer) Register(server *grpc.Server) {
-	proto.RegisterRouteGuideServer(server, nil)
+	proto.RegisterGatewayServer(server, i.im)
 }

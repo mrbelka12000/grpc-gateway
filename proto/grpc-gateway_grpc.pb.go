@@ -18,98 +18,86 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// RouteGuideClient is the client API for RouteGuide service.
+// GatewayClient is the client API for Gateway service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type RouteGuideClient interface {
-	// A simple RPC.
-	//
-	// Obtains the feature at a given position.
-	//
-	// A feature with an empty name is returned if there's no feature at the given
-	// position.
-	GetFeature(ctx context.Context, in *Point, opts ...grpc.CallOption) (*Feature, error)
+type GatewayClient interface {
+	GetInfoByIIN(ctx context.Context, in *Message, opts ...grpc.CallOption) (*Response, error)
 }
 
-type routeGuideClient struct {
+type gatewayClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewRouteGuideClient(cc grpc.ClientConnInterface) RouteGuideClient {
-	return &routeGuideClient{cc}
+func NewGatewayClient(cc grpc.ClientConnInterface) GatewayClient {
+	return &gatewayClient{cc}
 }
 
-func (c *routeGuideClient) GetFeature(ctx context.Context, in *Point, opts ...grpc.CallOption) (*Feature, error) {
-	out := new(Feature)
-	err := c.cc.Invoke(ctx, "/routeguide.RouteGuide/GetFeature", in, out, opts...)
+func (c *gatewayClient) GetInfoByIIN(ctx context.Context, in *Message, opts ...grpc.CallOption) (*Response, error) {
+	out := new(Response)
+	err := c.cc.Invoke(ctx, "/proto.Gateway/GetInfoByIIN", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// RouteGuideServer is the server API for RouteGuide service.
-// All implementations must embed UnimplementedRouteGuideServer
+// GatewayServer is the server API for Gateway service.
+// All implementations must embed UnimplementedGatewayServer
 // for forward compatibility
-type RouteGuideServer interface {
-	// A simple RPC.
-	//
-	// Obtains the feature at a given position.
-	//
-	// A feature with an empty name is returned if there's no feature at the given
-	// position.
-	GetFeature(context.Context, *Point) (*Feature, error)
-	mustEmbedUnimplementedRouteGuideServer()
+type GatewayServer interface {
+	GetInfoByIIN(context.Context, *Message) (*Response, error)
+	mustEmbedUnimplementedGatewayServer()
 }
 
-// UnimplementedRouteGuideServer must be embedded to have forward compatible implementations.
-type UnimplementedRouteGuideServer struct {
+// UnimplementedGatewayServer must be embedded to have forward compatible implementations.
+type UnimplementedGatewayServer struct {
 }
 
-func (UnimplementedRouteGuideServer) GetFeature(context.Context, *Point) (*Feature, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetFeature not implemented")
+func (UnimplementedGatewayServer) GetInfoByIIN(context.Context, *Message) (*Response, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetInfoByIIN not implemented")
 }
-func (UnimplementedRouteGuideServer) mustEmbedUnimplementedRouteGuideServer() {}
+func (UnimplementedGatewayServer) mustEmbedUnimplementedGatewayServer() {}
 
-// UnsafeRouteGuideServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to RouteGuideServer will
+// UnsafeGatewayServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to GatewayServer will
 // result in compilation errors.
-type UnsafeRouteGuideServer interface {
-	mustEmbedUnimplementedRouteGuideServer()
+type UnsafeGatewayServer interface {
+	mustEmbedUnimplementedGatewayServer()
 }
 
-func RegisterRouteGuideServer(s grpc.ServiceRegistrar, srv RouteGuideServer) {
-	s.RegisterService(&RouteGuide_ServiceDesc, srv)
+func RegisterGatewayServer(s grpc.ServiceRegistrar, srv GatewayServer) {
+	s.RegisterService(&Gateway_ServiceDesc, srv)
 }
 
-func _RouteGuide_GetFeature_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Point)
+func _Gateway_GetInfoByIIN_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Message)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(RouteGuideServer).GetFeature(ctx, in)
+		return srv.(GatewayServer).GetInfoByIIN(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/routeguide.RouteGuide/GetFeature",
+		FullMethod: "/proto.Gateway/GetInfoByIIN",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(RouteGuideServer).GetFeature(ctx, req.(*Point))
+		return srv.(GatewayServer).GetInfoByIIN(ctx, req.(*Message))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// RouteGuide_ServiceDesc is the grpc.ServiceDesc for RouteGuide service.
+// Gateway_ServiceDesc is the grpc.ServiceDesc for Gateway service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var RouteGuide_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "routeguide.RouteGuide",
-	HandlerType: (*RouteGuideServer)(nil),
+var Gateway_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "proto.Gateway",
+	HandlerType: (*GatewayServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetFeature",
-			Handler:    _RouteGuide_GetFeature_Handler,
+			MethodName: "GetInfoByIIN",
+			Handler:    _Gateway_GetInfoByIIN_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

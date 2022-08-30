@@ -5,7 +5,7 @@ import (
 	"log"
 	"net"
 
-	gateway "github.com/mrbelka12000/grpc-gateway/internal/delivery/grpc"
+	gprc_server "github.com/mrbelka12000/grpc-gateway/internal/delivery/grpc"
 	"github.com/mrbelka12000/grpc-gateway/internal/delivery/http"
 	"github.com/mrbelka12000/grpc-gateway/internal/service"
 	"google.golang.org/grpc"
@@ -18,12 +18,14 @@ func Initialize() {
 	}
 
 	grpcServer := grpc.NewServer(grpc.EmptyServerOption{})
+	defer grpcServer.Stop()
 
 	srvImp := service.New()
-	gatewayImp := gateway.New(srvImp)
-	gatewayImp.Register(grpcServer)
+	gprcServer := gprc_server.New(srvImp)
+	gprcServer.Register(grpcServer)
 
 	gateway := http.New()
+	defer gateway.Shutdown()
 	go grpcServer.Serve(lis)
 	fmt.Println("grpc server started")
 	fmt.Println("http server started")

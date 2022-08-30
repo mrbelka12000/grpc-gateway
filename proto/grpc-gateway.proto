@@ -1,17 +1,23 @@
 syntax = "proto3";
 package proto;
 option go_package = "proto/";
-
 import "proto/google/api/annotations.proto";
 
 service Gateway {
-  rpc GetExample(Message) returns (Message) {
+  rpc GetInfoByIIN(Message) returns (Response) {
     option (google.api.http) = {
-      get: "/get/{id}"
+      get: "/get/{IIN}"
     };
   }
 }
 
 message Message {
-  uint64 id = 1;
+  string IIN = 1;
+}
+
+message Response {
+  string companyName = 1;
+  string KPP = 2;
+  string fio = 3;
+  string IIn =4;
 }

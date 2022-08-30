@@ -1,13 +1,14 @@
 package grpc
 
 import (
+	"context"
 	"github.com/mrbelka12000/grpc-gateway/internal/service"
 	"github.com/mrbelka12000/grpc-gateway/proto"
 )
 
 type Implementer struct {
-	proto.UnimplementedRouteGuideServer
 	f service.Fetch
+	proto.UnimplementedGatewayServer
 }
 
 func newImpelementer(f service.Fetch) *Implementer {
@@ -16,5 +17,6 @@ func newImpelementer(f service.Fetch) *Implementer {
 	}
 }
 
-func (i *Implementer) GetInfoByIIN(iin string) {
+func (i *Implementer) GetInfoByIIN(ctx context.Context, message *proto.Message) (*proto.Response, error) {
+	return i.f.GetInfoByIIN(ctx, message)
 }
