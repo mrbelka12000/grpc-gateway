@@ -14,11 +14,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      BRANCH : ${GITHUB_REF##*/}
+      BRANCH : check
     steps:
     - uses: actions/checkout@v3
     - name: Branch name
-      run: echo running on branch $BRANCH
+      run: echo running on branch  ${GITHUB_REF##*/} && echo $BRANCH
     - name: Set up Go
       uses: actions/setup-go@v3
       with:
