@@ -10,13 +10,15 @@ on:
     branches: [ "main" ]
 
 jobs:
-
+  
   build:
     runs-on: ubuntu-latest
+    env:
+      BRANCH : ${GITHUB_REF##*/}
     steps:
     - uses: actions/checkout@v3
     - name: Branch name
-      run: echo running on branch ${GITHUB_REF##*/}
+      run: echo running on branch $BRANCH
     - name: Set up Go
       uses: actions/setup-go@v3
       with:
