@@ -18,7 +18,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Branch name
-      run: $BRANCH=${GITHUB_REF##*/} && echo $BRANCH
+      run: echo ветка = ${GITHUB_REF##*/}
     - name: Set up Go
       uses: actions/setup-go@v3
       with:
