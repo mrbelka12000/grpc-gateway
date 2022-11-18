@@ -18,7 +18,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Branch name
-      run: echo ${GITHUB_REF##*/} > branch; if [ branch = "valid" ]; then  echo "branch has the value 'valid'" fi
+      run: echo ${GITHUB_REF##*/} > branch; if [ $branch = "valid" ]; then  echo "branch has the value 'valid'" fi
 
     - name: Set up Go
       uses: actions/setup-go@v3
