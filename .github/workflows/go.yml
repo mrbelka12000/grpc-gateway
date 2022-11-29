@@ -11,7 +11,6 @@ on:
 
 jobs:
   build:
-    if: ${GITHUB_REF##*/} = "main"
     runs-on: ubuntu-latest
     env:
       BRANCH : check
@@ -19,12 +18,22 @@ jobs:
     - uses: actions/checkout@v3
     - name: Branch name
       run: GITHUB_REF=${GITHUB_REF##*/}; echo ${GITHUB_REF##*/}; if [ "${GITHUB_REF##*/}" = "main" ] ;then  echo "branch has the value 'valid'" ; else echo "zaebka" ; fi
+    
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: extract_branch
+    
 
+      
     - name: Set up Go
       uses: actions/setup-go@v3
       with:
         go-version: 1.18
     
+    - name: checker
+      run: echo ${{ steps.extract_branch.outputs.branch }}
+      
     - name: Build
       run: go build -v ./...
 
