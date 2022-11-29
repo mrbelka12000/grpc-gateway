@@ -10,8 +10,8 @@ on:
     branches: [ "main" ]
 
 jobs:
-  
   build:
+    if: ${GITHUB_REF##*/} = "main"
     runs-on: ubuntu-latest
     env:
       BRANCH : check
